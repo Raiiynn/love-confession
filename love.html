@@ -12,13 +12,21 @@
   <!-- Resume audio from previous page if available -->
   <audio id="audio" src="audio/audio.mp3" preload="auto" crossorigin="anonymous"></audio>
   <script>
-    document.getElementById('audio').addEventListener('error', function(e) {
-      console.error('Audio error:', e.target.error, 'src:', this.src);
+    var audio = document.getElementById('audio');
+    
+    // Try local path first, fallback to GitHub raw if fails
+    audio.addEventListener('error', function(e) {
+      console.error('Local audio failed:', e.target.error);
+      if (this.src !== 'https://raw.githubusercontent.com/Raiiynn/love-confession/main/audio/audio.mp3') {
+        console.log('Trying GitHub CDN...');
+        this.src = 'https://raw.githubusercontent.com/Raiiynn/love-confession/main/audio/audio.mp3';
+      }
     });
-    document.getElementById('audio').addEventListener('loadstart', function() {
+    
+    audio.addEventListener('loadstart', function() {
       console.log('Audio loading from:', this.src);
     });
-    document.getElementById('audio').addEventListener('canplay', function() {
+    audio.addEventListener('canplay', function() {
       console.log('Audio ready to play');
     });
   </script>
