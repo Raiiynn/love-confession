@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html translate="no" class="no-js">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Hai ❤</title>
+	<meta name="author" content="Heryoka">
+	<link rel="stylesheet" type="text/css" href="css/komponen.css" />
+	<link rel="stylesheet" type="text/css" href="css/animasi.css" />
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/modernizr.custom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<style>
+		/* tombol/link ke halaman love.html */
+		.btn-go-to-love {
+			display:inline-block;
+			background:#ff6b81;
+			color:#fff;
+			padding:.6rem 1rem;
+			border-radius:6px;
+			text-decoration:none;
+			font-weight:600;
+			box-shadow:0 4px 10px rgba(0,0,0,0.12);
+		}
+		.btn-go-to-love:hover { opacity:0.95 }
+		/* when placed inside .tempat-halaman we use absolute positioning so it sits above pages */
+		.tempat-halaman .btn-go-to-love {
+			position: absolute;
+			bottom: 28px;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 99999999;
+			pointer-events: auto;
+		}
+		/* override: jika tombol diletakkan di dalam .halaman-11, tampilkan secara normal (tidak absolute) */
+		.halaman-11 .btn-go-to-love {
+			position: static;
+			bottom: auto;
+			left: auto;
+			transform: none;
+			margin-top: 20px;
+			z-index: 2;
+		}
+	</style>
+</head>
+
+<body>
+    <audio id="audio" src="audio/audio.mp3"></audio>
+	<div id="ruang-halaman" class="tempat-halaman">
+	    <a href="https://github.com/heryyy" target="_blank" class="tombolmelayang"><i class="fab fa-github"></i></a>
+		<div class="halaman halaman-1">
+			<div class="kotak">
+				<h1 class="ml1">
+					<span class="text-wrapper">
+						<span class="line line1"></span>
+						<span class="letters">Halo</span>
+						<span class="line line2"></span>
+					</span>
+				</h1>
+				<div class="tempat-tombol">
+					<button id="tombolMulaiSekarang" class="mulai-sekarang">Start</button>
+
+				</div>
+			</div>
+		</div>
+		<div class="halaman halaman-2">
+			<div class="kotak">
+				<h1 class="ml15">
+					<span class="word">Perkenalkan</span>
+					<span class="word">Namaku ......</span>
+				</h1>
+			</div>
+		</div>
+		<div class="halaman halaman-3">
+			<div class="kotak">
+				<h1 class="ml16">Dapa kentut</h1>
+			</div>
+		</div>
+		<div class="halaman halaman-4">
+			<div class="kotak">
+				<h1 class="ml11">
+					<span class="text-wrapper">
+						<span class="line line1"></span>
+						<span class="letters">Jadi hari ini</span>
+					</span>
+				</h1>
+			</div>
+		</div>
+		<div class="halaman halaman-5">
+			<div class="kotak">
+				<h1 class="ml9">
+					<span class="text-wrapper">
+						<span class="letters">Aku mau beritahu sesuatu</span>
+					</span>
+				</h1>
+			</div>
+		</div>
+		<div class="halaman halaman-6">
+			<div class="kotak">
+				<h1 class="ml2">Sebenarnya aku</h1>
+			</div>
+		</div>
+
+		<div class="halaman halaman-7">
+			<div class="kotak">
+				<h1 class="ml4">
+					<span class="letters letters-1">suka</span>
+					<span class="letters letters-2">sama kamu</span>
+					<span class="letters letters-3">of course kesi kentut</span>
+				</h1>
+			</div>
+		</div>
+
+		<div class="halaman halaman-8">
+			<div class="kotak">
+				<h1 class="ml12">Walaupun kita beda Owner</h1>
+			</div>
+		</div>
+
+		<div class="halaman halaman-9">
+			<div class="kotak">
+				<h1 class="ml14">
+					<span class="text-wrapper">
+						<span class="letters">Jalanin dulu aja kali yaa? ...</span>
+						<span class="line"></span>
+					</span>
+				</h1>
+			</div>
+		</div>
+
+		<div class="halaman halaman-10">
+			<div class="kotak">
+				<h1 class="ml7">
+					<span class="text-wrapper">
+						<span class="letters">Love You ❤</span>
+					</span>
+				</h1>
+			</div>
+		</div>
+
+		<div class="halaman halaman-11">
+			<div class="kotak">
+				<img src="gambar/bears-hug-love-you.gif" id="gambar" style="display: none;">
+				<h1 class="ml13">kesi kentut ❤</h1>
+				<!-- Tombol hanya untuk halaman-11 -->
+				<p style="text-align:center; margin-top:20px;">
+					<a href="love.html" class="btn-go-to-love" aria-label="Buka halaman Love">Buka Halaman Surprise❤️</a>
+				</p>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="pesan-ga-support-animasi">
+		<p>Browser Gak Support CSS! Ganti Browser Dulu Cuy</p>
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="js/transisi.js"></script>
+	<script src="js/salju.js" type="text/javascript"></script>
+</body>
+
+</html>
