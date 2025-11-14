@@ -17,6 +17,7 @@
     var audio = document.getElementById('audio');
     var audioBtn = document.getElementById('audioToggleBtn');
     var isPlaying = false;
+    var hasTriedAutoplay = false;
     
     // Try local path first, fallback to GitHub raw if fails
     audio.src = 'audio/audio.mp3';
@@ -27,6 +28,29 @@
         this.src = 'https://raw.githubusercontent.com/Raiiynn/love-confession/main/audio/audio.mp3';
       }
     });
+    
+    function attemptAutoplay() {
+      if (!hasTriedAutoplay) {
+        hasTriedAutoplay = true;
+        // Try to resume saved position
+        try {
+          var savedTime = sessionStorage.getItem('audio_currentTime');
+          if (savedTime && audio.readyState >= 1) {
+            try {
+              audio.currentTime = Math.min(parseFloat(savedTime), audio.duration || parseFloat(savedTime));
+            } catch (e) { }
+          }
+        } catch (e) {}
+        
+        audio.play().then(function() {
+          console.log('Autoplay successful');
+          isPlaying = true;
+          audioBtn.textContent = '🔊';
+        }).catch(function(err) {
+          console.log('Autoplay blocked:', err);
+        });
+      }
+    }
     
     audioBtn.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -58,25 +82,16 @@
     audio.addEventListener('loadstart', function() {
       console.log('Audio loading from:', this.src);
     });
+    
     audio.addEventListener('canplay', function() {
       console.log('Audio ready to play');
-      // Try to resume from sessionStorage and autoplay
-      try {
-        var savedTime = sessionStorage.getItem('audio_currentTime');
-        var wasPlaying = sessionStorage.getItem('audio_playing') === 'true';
-
-        if (savedTime) {
-          try {
-            audio.currentTime = Math.min(parseFloat(savedTime), audio.duration || parseFloat(savedTime));
-          } catch (e) { }
-        }
-        
-        // Autoplay if it was playing before, or just autoplay anyway
-        audio.play().catch(function(err) {
-          console.log('Autoplay blocked, user needs to interact first:', err);
-        });
-      } catch (e) {}
+      attemptAutoplay();
     });
+    
+    // Try autoplay on first user interaction (click, touch, key)
+    document.addEventListener('click', attemptAutoplay, { once: true });
+    document.addEventListener('touchstart', attemptAutoplay, { once: true });
+    document.addEventListener('keydown', attemptAutoplay, { once: true });
     
     // keep updating saved position while on this page
     try {
