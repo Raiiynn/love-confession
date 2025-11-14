@@ -98,6 +98,10 @@
       });
       audio.addEventListener('canplay', function() {
         console.log('Audio ready to play');
+        // Autoplay when ready
+        audio.play().catch(function(err) {
+          console.log('Autoplay blocked, user needs to interact first:', err);
+        });
       });
     </script>
 	<div id="ruang-halaman" class="tempat-halaman">

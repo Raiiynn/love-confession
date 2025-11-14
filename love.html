@@ -60,33 +60,26 @@
     });
     audio.addEventListener('canplay', function() {
       console.log('Audio ready to play');
+      // Try to resume from sessionStorage and autoplay
+      try {
+        var savedTime = sessionStorage.getItem('audio_currentTime');
+        var wasPlaying = sessionStorage.getItem('audio_playing') === 'true';
+
+        if (savedTime) {
+          try {
+            audio.currentTime = Math.min(parseFloat(savedTime), audio.duration || parseFloat(savedTime));
+          } catch (e) { }
+        }
+        
+        // Autoplay if it was playing before, or just autoplay anyway
+        audio.play().catch(function(err) {
+          console.log('Autoplay blocked, user needs to interact first:', err);
+        });
+      } catch (e) {}
     });
     
-    // Try to resume from sessionStorage saved position if available
+    // keep updating saved position while on this page
     try {
-      var savedTime = sessionStorage.getItem('audio_currentTime');
-      var wasPlaying = sessionStorage.getItem('audio_playing') === 'true';
-
-      if (savedTime) {
-        audio.addEventListener('loadedmetadata', function() {
-          try {
-            audio.currentTime = Math.min(parseFloat(savedTime), audio.duration || parseFloat(savedTime));
-          } catch (e) { }
-          if (wasPlaying) {
-            audio.play().catch(function(){});
-          }
-        });
-        if (audio.readyState >= 1) {
-          try {
-            audio.currentTime = Math.min(parseFloat(savedTime), audio.duration || parseFloat(savedTime));
-          } catch (e) { }
-          if (wasPlaying) {
-            audio.play().catch(function(){});
-          }
-        }
-      }
-
-      // keep updating saved position while on this page
       setInterval(function(){
         try {
           if (!isNaN(audio.currentTime)) {
