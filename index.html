@@ -48,17 +48,49 @@
 </head>
 
 <body>
-    <audio id="audio" src="audio/audio.mp3" crossorigin="anonymous"></audio>
+    <audio id="audio" src="audio/audio.mp3" crossorigin="anonymous" loop></audio>
+    <button id="audioToggleBtn" style="position: fixed; top: 20px; right: 20px; z-index: 100000; background: #ff6b81; color: white; border: none; padding: 10px 15px; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;" title="Toggle Audio">🔊</button>
+    
     <script>
       var audio = document.getElementById('audio');
+      var audioBtn = document.getElementById('audioToggleBtn');
+      var isPlaying = false;
       
       // Try local path first, fallback to GitHub raw if fails
+      audio.src = 'audio/audio.mp3';
       audio.addEventListener('error', function(e) {
         console.error('Local audio failed:', e.target.error);
-        if (this.src !== 'https://raw.githubusercontent.com/Raiiynn/love-confession/main/audio/audio.mp3') {
+        if (this.src.indexOf('raw.githubusercontent.com') === -1) {
           console.log('Trying GitHub CDN...');
           this.src = 'https://raw.githubusercontent.com/Raiiynn/love-confession/main/audio/audio.mp3';
         }
+      });
+      
+      audioBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (isPlaying) {
+          audio.pause();
+          audioBtn.textContent = '🔇';
+          isPlaying = false;
+        } else {
+          audio.play().catch(function(err) {
+            console.error('Play failed:', err);
+          });
+          audioBtn.textContent = '🔊';
+          isPlaying = true;
+        }
+      });
+      
+      audio.addEventListener('play', function() {
+        console.log('Audio playing');
+        isPlaying = true;
+        audioBtn.textContent = '🔊';
+      });
+      
+      audio.addEventListener('pause', function() {
+        console.log('Audio paused');
+        isPlaying = false;
+        audioBtn.textContent = '🔇';
       });
       
       audio.addEventListener('loadstart', function() {
