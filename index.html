@@ -48,7 +48,18 @@
 </head>
 
 <body>
-    <audio id="audio" src="audio/audio.mp3"></audio>
+    <audio id="audio" src="audio/audio.mp3" crossorigin="anonymous"></audio>
+    <script>
+      document.getElementById('audio').addEventListener('error', function(e) {
+        console.error('Audio error:', e.target.error, 'src:', this.src);
+      });
+      document.getElementById('audio').addEventListener('loadstart', function() {
+        console.log('Audio loading from:', this.src);
+      });
+      document.getElementById('audio').addEventListener('canplay', function() {
+        console.log('Audio ready to play');
+      });
+    </script>
 	<div id="ruang-halaman" class="tempat-halaman">
 		<div class="halaman halaman-1">
 			<div class="kotak">

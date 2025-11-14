@@ -10,7 +10,18 @@
 <body>
   <canvas id="heartCanvas"></canvas>
   <!-- Resume audio from previous page if available -->
-  <audio id="audio" src="audio/audio.mp3" preload="auto"></audio>
+  <audio id="audio" src="audio/audio.mp3" preload="auto" crossorigin="anonymous"></audio>
+  <script>
+    document.getElementById('audio').addEventListener('error', function(e) {
+      console.error('Audio error:', e.target.error, 'src:', this.src);
+    });
+    document.getElementById('audio').addEventListener('loadstart', function() {
+      console.log('Audio loading from:', this.src);
+    });
+    document.getElementById('audio').addEventListener('canplay', function() {
+      console.log('Audio ready to play');
+    });
+  </script>
 
   <div class="ui-container">
     <div class="controls">
