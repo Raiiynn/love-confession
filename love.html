@@ -9,6 +9,8 @@
 </head>
 <body>
   <canvas id="heartCanvas"></canvas>
+  <!-- Resume audio from previous page if available -->
+  <audio id="audio" src="audio/audio.mp3" preload="auto"></audio>
 
   <div class="ui-container">
     <div class="controls">
@@ -34,6 +36,54 @@
 
   <script src="./style/script.js">
     
+  </script>
+  <script>
+    // Try to resume audio playback position saved by index.html
+    (function(){
+      var audio = document.getElementById('audio');
+      if (!audio) return;
+      try {
+        var savedTime = sessionStorage.getItem('audio_currentTime');
+        var wasPlaying = sessionStorage.getItem('audio_playing') === 'true';
+
+        if (savedTime) {
+          // wait until metadata is loaded to set currentTime
+          audio.addEventListener('loadedmetadata', function() {
+            try {
+              audio.currentTime = Math.min(parseFloat(savedTime), audio.duration || parseFloat(savedTime));
+            } catch (e) { }
+            if (wasPlaying) {
+              var p = audio.play();
+              if (p && p.catch) p.catch(function(){});
+            }
+          });
+          // in case metadata already loaded
+          if (audio.readyState >= 1) {
+            try {
+              audio.currentTime = Math.min(parseFloat(savedTime), audio.duration || parseFloat(savedTime));
+            } catch (e) { }
+            if (wasPlaying) {
+              var p2 = audio.play();
+              if (p2 && p2.catch) p2.catch(function(){});
+            }
+          }
+        } else if (wasPlaying) {
+          // no saved time but wasPlaying true: try play
+          var p3 = audio.play();
+          if (p3 && p3.catch) p3.catch(function(){});
+        }
+
+        // keep updating saved position while on this page
+        setInterval(function(){
+          try {
+            if (!isNaN(audio.currentTime)) {
+              sessionStorage.setItem('audio_currentTime', audio.currentTime.toString());
+              sessionStorage.setItem('audio_playing', (!audio.paused).toString());
+            }
+          } catch (e) {}
+        }, 500);
+      } catch (e) {}
+    })();
   </script>
 </body>
 </html>

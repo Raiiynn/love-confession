@@ -31,23 +31,58 @@ var PageTransitions = (function () {
 
         var audio = document.getElementById("audio");
 
-        $iterate.on('click', function () {
-            $('#tombolMulaiSekarang').hide();
-            audio.play();
-
+        // persist audio playback position/state so other pages can resume without restarting
+        try {
             setInterval(function () {
-                $("#tombolMulaiSekarang").click();
-            }, 7000);
+                if (audio && !isNaN(audio.currentTime)) {
+                    sessionStorage.setItem('audio_currentTime', audio.currentTime.toString());
+                    sessionStorage.setItem('audio_playing', (!audio.paused).toString());
+                }
+            }, 500);
 
-            if (isAnimating) {
-                return false;
-            }
+            window.addEventListener('beforeunload', function () {
+                try {
+                    if (audio && !isNaN(audio.currentTime)) {
+                        sessionStorage.setItem('audio_currentTime', audio.currentTime.toString());
+                        sessionStorage.setItem('audio_playing', (!audio.paused).toString());
+                    }
+                } catch (e) { }
+            });
+        } catch (e) { }
+
+        // central start sequence (used by click fallback and autoplay)
+        var _started = false;
+        function startSequence() {
+            if (_started) return;
+            _started = true;
+            $('#tombolMulaiSekarang').hide();
+            try { audio.play(); } catch (e) { /* autoplay may be blocked; ignore */ }
+
+            // run first transition immediately
             if (animcursor > 67) {
                 animcursor = 1;
             }
             nextPage(animcursor);
             ++animcursor;
+
+            // schedule subsequent transitions
+            setInterval(function () {
+                if (isAnimating) return;
+                if (animcursor > 67) {
+                    animcursor = 1;
+                }
+                nextPage(animcursor);
+                ++animcursor;
+            }, 7000);
+        }
+
+        // keep click handler as a fallback (in case user wants to manually start)
+        $iterate.on('click', function () {
+            startSequence();
         });
+
+        // Start autoplay immediately
+        startSequence();
 
     }
 
